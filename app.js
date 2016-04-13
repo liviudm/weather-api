@@ -4,6 +4,7 @@ var geoip = require('geoip-lite');
 var Forecast = require('forecast');
 
 app.set('port', (process.env.PORT || 5000));
+app.set('forecastApiKey', process.env.FORECAST_API_KEY);
 
 function getCoordinates(ip) {
   return geoip.lookup(ip).ll;
@@ -11,7 +12,7 @@ function getCoordinates(ip) {
 
 var forecast = new Forecast({
   service: 'forecast.io',
-  key: '78c2cde5f16958973830ec2aa6037442',
+  key: app.get('forecastApiKey'),
   units: 'cecius',
   cache: true,
   ttl: {
@@ -24,7 +25,7 @@ app.get('/', function(req, res) {
   var ip = (req.headers['x-forwarded-for'] || '').split(',')[0] || req.connection.remoteAddress;
   forecast.get(getCoordinates(ip), function(err, weather) {
     if(err) res.status(500).json({ error: 'Can\'t get weather data'});
-    res.json(weather);
+    res.json(weather.currently);
   });
 });
 
