@@ -3,6 +3,8 @@ var app = express();
 var geoip = require('geoip-lite');
 var Forecast = require('forecast');
 
+app.set('port', (process.env.PORT || 5000));
+
 function getCoordinates(ip) {
   return geoip.lookup(ip).ll;
 }
@@ -26,6 +28,6 @@ app.get('/', function(req, res) {
   });
 });
 
-app.listen(3000, function() {
-  console.log('Weather Bot listening on port 3000');
+app.listen(app.get('port'), function() {
+  console.log('Weather Bot listening on port ', app.get('port'));
 });
