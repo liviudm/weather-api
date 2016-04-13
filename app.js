@@ -19,7 +19,7 @@ var forecast = new Forecast({
 });
 
 app.get('/', function(req, res) {
-  var ip = req.headers['x-forwarded-for'] || '').split(',')[0] || req.connection.remoteAddress;
+  var ip = (req.headers['x-forwarded-for'] || '').split(',')[0] || req.connection.remoteAddress;
   forecast.get(getCoordinates(ip), function(err, weather) {
     if(err) res.status(500).json({ error: 'Can\'t get weather data'});
     res.json(weather);
