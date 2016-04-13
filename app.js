@@ -25,7 +25,7 @@ app.get('/', function(req, res) {
   var ip = (req.headers['x-forwarded-for'] || '').split(',')[0] || req.connection.remoteAddress;
   forecast.get(getCoordinates(ip), function(err, weather) {
     if(err) res.status(500).json({ error: 'Can\'t get weather data'});
-    res.json({ timezone: weather.timezone, currently: weather.currently});
+    res.status(200).json({ status: 200, timezone: weather.timezone, currently: weather.currently});
   });
 });
 
